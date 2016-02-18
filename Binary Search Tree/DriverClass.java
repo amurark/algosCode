@@ -38,9 +38,14 @@ public class DriverClass {
 		
 		System.out.println("Enter the number you want to search");
 		Scanner sc = new Scanner(System.in);
-		int srch = sc.nextInt();
-		tree.search(srch);
+//		int srch = sc.nextInt();
+//		tree.search(srch);
 		
+		System.out.println("Enter the number you want to delete");
+		int del = sc.nextInt();
+		tree.delete(del);
+		System.out.println("=======================================");
+		tree.show();
 		
 		sc.close();
 		

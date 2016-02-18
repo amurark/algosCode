@@ -6,7 +6,7 @@ public class BinaryTree {
 	private Node parentNode;
 	private String side = null;
 	
-	private Node parNode;
+	private Node cutOffPar;
 	
 	public BinaryTree() {
 		this.root = null;
@@ -86,5 +86,84 @@ public class BinaryTree {
 			}
 		}
 		return level;
+	}
+	
+	
+	void delete(int del) {
+		searchNum(root, del, 0);
+		if(foundNode == null) {
+			System.out.println("notfound ");
+		} else {
+			if(foundNode.getLeft() == null && foundNode.getRight() == null) {
+				if(side == "left") {
+					parentNode.setLeft(null); 
+				} else if(side == "right") {
+					parentNode.setRight(null);
+				}
+			} else if(foundNode.getLeft() == null) {
+				if(side == "left") {
+					parentNode.setLeft(foundNode.getRight()); 
+				} else if(side == "right") {
+					parentNode.setRight(foundNode.getRight());
+				}
+			} else if(foundNode.getRight() == null) {
+				if(side == "left") {
+					parentNode.setLeft(foundNode.getLeft()); 
+				} else if(side == "right") {
+					parentNode.setRight(foundNode.getLeft());
+				}
+			} else {
+				Node root = findPred(foundNode, foundNode.getLeft());
+				Node lMost = getLeftMost(root);
+				System.out.println(root.getKey()+" "+lMost.getKey());
+				if(foundNode.getLeft().getKey() == root.getKey()) {
+					foundNode.setLeft(null);
+				} else if(foundNode.getRight().getKey() == root.getKey()) {
+					foundNode.setRight(null);
+				} else {
+					removeDuplicate(foundNode, root);
+				}
+				
+				if(parentNode != null) {
+					if(side == "left") {
+						parentNode.setLeft(root); 
+					} else if(side == "right") {
+						parentNode.setRight(root);
+					}
+				} else {
+					this.root = root;
+				}
+				root.setRight(foundNode.getRight());
+				lMost.setLeft(foundNode.getLeft());
+				
+			}
+		}
+		//System.out.println(foundNode.getLeft().getKey());
+	}
+	
+	void removeDuplicate(Node r, Node root) {
+		if(r.getRight() != null && r.getRight().getKey() == root.getKey()) {
+			r.setRight(null);
+		} else {
+			removeDuplicate(r.getLeft(), root);
+		}
+	}
+	
+	Node findPred(Node parent, Node root) {
+		if(root.getRight() == null) {
+			return root;
+		} else {
+			root = findPred(root, root.getRight());
+		}
+		return root;
+	}
+	
+	Node getLeftMost(Node r) {
+		if(r.getLeft() == null) {
+			return r;
+		} else {
+			r = getLeftMost(r.getLeft());
+		} 
+		return r;
 	}
 }
